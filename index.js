@@ -4,6 +4,7 @@ function gameBoard() {
     const player2 = "O";
     let isPlayer1Turn = true;
     let marker;
+    let winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
     const getBoard = () => board;
 
@@ -26,6 +27,22 @@ function gameBoard() {
 
 
     }
+
+    const checkWinner = function () {
+        for (let condition of winConditions) {
+            const [a, b, c] = condition;
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                console.log(`Player ${board[a]} wins!`);
+                return true;
+            }
+        }
+        if (!board.includes("")) {
+            console.log("It's a draw!");
+            return true;
+        }
+        return false;
+    }
+
     const makeMove = function (ask) {
         if (isPlayer1Turn) {
             marker = "X";
@@ -61,9 +78,14 @@ function gameBoard() {
 
         showBoard(getBoard());
 
+        if (checkWinner()) {
+            console.log("Game over!");
+
+        }
+
         isPlayer1Turn = !isPlayer1Turn;
 
-
+        return "Player made a move";
     }
 
 
@@ -76,6 +98,6 @@ game.showBoard(game.getBoard());
 
 const move = game.makeMove;
 
-//game.makeMove(game.isPlayer1Turn, game.isPlayer2Turn);
+
 
 
