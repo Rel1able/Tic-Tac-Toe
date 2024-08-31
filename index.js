@@ -15,7 +15,7 @@ function gameBoard() {
         console.log("Type move() to make a move");
     }
 
-    const replaceValueInArray = function (value, arr, marker) {
+    const updateBoard = function (value, arr, marker) {
         if (arr[value - 1] === "") {
             arr[value - 1] = marker;
         } else {
@@ -49,7 +49,7 @@ function gameBoard() {
                 ask = prompt(`Player 1 make your move.Enter the cell from 1 to 9`);
                 ask = parseInt(ask, 10);
                 if (ask > 0 && ask < 10) {
-                    const success = replaceValueInArray(ask, board, marker);
+                    const success = updateBoard(ask, board, marker);
                     if (success) break;
                 } else {
                     console.log("Invalid input. Try again. ")
@@ -62,7 +62,7 @@ function gameBoard() {
                 ask = prompt(`Player 2 make your move.Enter the cell from 1 to 9`);
                 ask = parseInt(ask, 10);
                 if (ask > 0 && ask < 10) {
-                    const success = replaceValueInArray(ask, board, marker);
+                    const success = updateBoard(ask, board, marker);
                     if (success) break;
                 } else {
                     console.log("Invalid input. Try again. ")
@@ -85,7 +85,7 @@ function gameBoard() {
 
         isPlayer1Turn = !isPlayer1Turn;
 
-        return `Player ${marker} made a move`;
+        return `Player ${marker} has made his  move`;
     }
 
     const playAgain = function () {
