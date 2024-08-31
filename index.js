@@ -1,7 +1,6 @@
 function gameBoard() {
-    const board = ["", "", "", "", "", "", "", "", ""];
-    const player1 = "X";
-    const player2 = "O";
+    let board = ["", "", "", "", "", "", "", "", ""];
+
     let isPlayer1Turn = true;
     let marker;
     let winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
@@ -79,17 +78,24 @@ function gameBoard() {
         showBoard(getBoard());
 
         if (checkWinner()) {
-            console.log("Game over!");
+            console.log("Game over! Type playAgain() to restart.");
+
 
         }
 
         isPlayer1Turn = !isPlayer1Turn;
 
-        return "Player made a move";
+        return `Player ${marker} made a move`;
+    }
+
+    const playAgain = function () {
+        board = getBoard();
+        board = ["", "", "", "", "", "", "", "", ""];
+        showBoard(getBoard());
     }
 
 
-    return { getBoard, player1, player2, showBoard, makeMove };
+    return { getBoard, showBoard, makeMove, playAgain };
 }
 
 const game = gameBoard();
@@ -97,6 +103,7 @@ const game = gameBoard();
 game.showBoard(game.getBoard());
 
 const move = game.makeMove;
+const playAgain = game.playAgain;
 
 
 
