@@ -1,109 +1,63 @@
 function gameBoard() {
     let board = ["", "", "", "", "", "", "", "", ""];
 
+
     let isPlayer1Turn = true;
-    let marker;
     let winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
-    const getBoard = () => board;
 
-    const showBoard = function (arr) {
-        for (let i = 0; i < arr.length; i += 3) {
-            console.log(arr.slice(i, i + 3));
-
-        }
-        console.log("Type move() to make a move");
-    }
-
-    const updateBoard = function (value, arr, marker) {
-        if (arr[value - 1] === "") {
-            arr[value - 1] = marker;
-        } else {
-            console.log("Cell is already taken. Try again");
-            return false;
-        }
-        return true;
+    const cells = document.querySelectorAll(".cell");
+    const statusElem = document.querySelector(".status");
+    const resetButton = document.querySelector(".reset-button");
 
 
+    function updateStatus(message) {
+        statusElem.textContent = message;
     }
 
     const checkWinner = function () {
         for (let condition of winConditions) {
             const [a, b, c] = condition;
             if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                console.log(`Player ${board[a]} wins!`);
+                updateStatus(`Player ${board[a]} wins!`);
                 return true;
             }
         }
         if (!board.includes("")) {
-            console.log("It's a draw!");
+            updateStatus("It's a draw!");
             return true;
         }
         return false;
     }
 
-    const makeMove = function (ask) {
-        if (isPlayer1Turn) {
-            marker = "X";
-            while (true) {
-                ask = prompt(`Player 1 make your move.Enter the cell from 1 to 9`);
-                ask = parseInt(ask, 10);
-                if (ask > 0 && ask < 10) {
-                    const success = updateBoard(ask, board, marker);
-                    if (success) break;
-                } else {
-                    console.log("Invalid input. Try again. ")
-                }
-
-            }
-        } else {
-            marker = "O";
-            while (true) {
-                ask = prompt(`Player 2 make your move.Enter the cell from 1 to 9`);
-                ask = parseInt(ask, 10);
-                if (ask > 0 && ask < 10) {
-                    const success = updateBoard(ask, board, marker);
-                    if (success) break;
-                } else {
-                    console.log("Invalid input. Try again. ")
-                }
-            }
-
-
+    function handleCellClick(event) {
+        const index = event.target.dataset.index;
+        if (board[index] !== "" || statusElem.textContent.includes("wins")) {
+            return;
         }
+        board[index] = isPlayer1Turn ? "X" : "O";
+        event.target.textContent = board[index];
 
-        console.log("----------------------")
-        console.log("----------------------")
-
-        showBoard(getBoard());
-
-        if (checkWinner()) {
-            console.log("Game over! Type playAgain() to restart.");
-
-
-        }
+        if (checkWinner()) return;
 
         isPlayer1Turn = !isPlayer1Turn;
-
-        return `Player ${marker} has made his  move`;
+        updateStatus(`Player ${isPlayer1Turn ? "X" : "O"}'s turn`);
     }
 
-    const playAgain = function () {
-        board = getBoard();
+    function resetGame() {
         board = ["", "", "", "", "", "", "", "", ""];
-        showBoard(getBoard());
+        cells.forEach(cell => (cell.textContent = ""));
+        isPlayer1Turn = true;
+        updateStatus("Player X's turn");
     }
 
+    cells.forEach(cell => cell.addEventListener("click", handleCellClick));
+    resetButton.addEventListener("click", resetGame);
 
-    return { getBoard, showBoard, makeMove, playAgain };
-}
+    updateStatus("Player X's turn");
+};
 
-const game = gameBoard();
-
-game.showBoard(game.getBoard());
-
-const move = game.makeMove;
-const playAgain = game.playAgain;
+gameBoard();
 
 
 
